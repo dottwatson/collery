@@ -104,9 +104,9 @@ class Collery{
      * @param Walker $subject
      * @return void
      */
-    protected function traverse(string $path,$subject){
-        $items = $subject->xfind($path,$this->separator);
+    protected function traverse(string $path, $subject){
 
+        $items      = $subject->xfind($path,$this->separator);
 
         if($items->iterable() && $items->count()){
             foreach($items->items() as $item){
@@ -119,25 +119,6 @@ class Collery{
         else{
             $this->resultSet[]=$items;
         }
-
-
-        // $bits           = explode($this->separator,$path);
-        // $treeKey        = array_shift($bits);
-        // foreach($subject as $key=>$value){
-        //     if($key == $treeKey || $treeKey == '*'){
-        //         if(empty($bits)){
-        //             $allowed = ($this->applyConditions('and',$value) || $this->applyConditions('or',$value));
-        //             if($allowed){
-        //                 $this->resultSet[] = $value;
-        //             }
-        //         }
-        //         else{
-        //             if(is_array($value)){
-        //                 $this->traverse(implode($this->separator,$bits),$value);
-        //             }
-        //         }
-        //     }
-        // }
     }
 
     /**

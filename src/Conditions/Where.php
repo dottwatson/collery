@@ -69,7 +69,7 @@ class Where extends Condition{
             return !empty($nestedResults);
         }
         elseif($target != COLLERY_CURRENT_ITEM){
-            $targetValue = $value->xfind($target);
+            $targetValue = $value->xfind($target,$this->builder->getSeparator());
         }
 
 
