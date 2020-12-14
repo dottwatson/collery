@@ -55,12 +55,14 @@ class Where extends Condition{
     ];
 
     public function apply(){
-        $args       = func_get_args();
-        $value      = array_shift($args);
-        $target     = array_shift($args);        
-        
-        $targetValue = $value;
+        $args           = func_get_args();
+        $value          = array_shift($args);
+        $target         = array_shift($args);        
+        $targetValue    = $value;
 
+        // rdump($target);
+        rdump('target',$target);
+        rdump('value',$value);
 
 
         //nested rules
@@ -69,18 +71,9 @@ class Where extends Condition{
             call_user_func($target,$nested);
             $nestedResults = $nested->select('*')->get();
 
-            // var_dump($nestedResults);
-            if(!empty($nestedResults)){
-                return true;
-            }
-
-            return false;
+            return !empty($nestedResults);
         }
         elseif($target != COLLERY_CURRENT_ITEM){
-            if(!$value->iterable()){
-                return false;
-            }
-
             $targetValue = $value->xfind($target);
         }
 
@@ -88,10 +81,14 @@ class Where extends Condition{
         $operator   = (string)array_shift($args);
         $compared   = array_shift($args);
 
-
         if(array_key_exists($operator,$this->operators)){
             $operatorFn = $this->operators[$operator];            
-            return call_user_func([$this,$operatorFn],$targetValue->primitiveValue(),$compared);
+            return call_user_func(
+                [$this,$operatorFn],
+                (is_a($targetValue,\Lonfo\Value::class) || is_a($targetValue,\Lonfo\Walker::class))
+                    ?$targetValue->primitiveValue()
+                    :$targetValue,$compared
+            );
         }
         else{
             throw new BadMethodCallException("Undefined operator `{$operator}`");
