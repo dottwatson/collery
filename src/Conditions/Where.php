@@ -60,6 +60,7 @@ class Where extends Condition{
         $target         = array_shift($args);        
         $targetValue    = $value;
 
+        //ok
 
         //nested rules
         if(is_object($target) && is_a($target,\Closure::class)){
